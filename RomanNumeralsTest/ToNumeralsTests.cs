@@ -1,4 +1,4 @@
-namespace RomanNumeralsTest
+﻿namespace RomanNumeralsTest
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RomanNumerals.Numerals;
@@ -26,5 +26,13 @@ namespace RomanNumeralsTest
             var l = NumeralBuilder.Build(2019);
             Assert.AreEqual("MMXIX", l);
         }
+
+        [TestMethod]
+        public void Convert1ToⅠTest()
+        {
+            var l = NumeralBuilder.Build(1, NumeralFlags.Unicode);
+            Assert.AreEqual("\u2160", l);
+        }
+
     }
 }

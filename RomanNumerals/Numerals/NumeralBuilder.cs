@@ -6,7 +6,7 @@
 
     public class NumeralBuilder
     {
-        public static string Build(uint v)
+        public static string Build(uint v, NumeralFlags flags = 0)
         {
             var builder = new StringBuilder();
             foreach (var digit in EnumerateDigits(v))
@@ -14,7 +14,7 @@
                 if (digit == 0)
                     continue;
 
-                var literalNumeral = RomanNumeralsDefinition.TryGet(digit);
+                var literalNumeral = RomanNumeralsDefinition.TryGet(digit,flags);
                 if (literalNumeral is null)
                     throw new ArgumentException("Can't convert number");
                 builder.Append(literalNumeral.Literal);

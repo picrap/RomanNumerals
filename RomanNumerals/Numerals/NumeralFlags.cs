@@ -3,5 +3,9 @@
     using System;
 
     [Flags]
-    public enum NumeralFlags { }
+    public enum NumeralFlags
+    {
+        Ascii = 0x01,
+        Unicode = 0x02,
+    }
 }
