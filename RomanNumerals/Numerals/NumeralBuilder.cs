@@ -9,15 +9,26 @@
         public static string Build(uint v, NumeralFlags flags = 0)
         {
             var builder = new StringBuilder();
+            var remaining = v;
             foreach (var digit in EnumerateDigits(v))
             {
                 if (digit == 0)
                     continue;
 
-                var literalNumeral = RomanNumeralsDefinition.TryGet(digit,flags);
+                // hint: if the remaining value fits in one digit, use it
+                var literalNumeral = RomanNumeralsDefinition.TryGet(remaining, flags);
+                if (literalNumeral != null)
+                {
+                    builder.Append(literalNumeral.Literal);
+                    break;
+                }
+
+                // look for single digit
+                literalNumeral = RomanNumeralsDefinition.TryGet(digit, flags);
                 if (literalNumeral is null)
                     throw new ArgumentException("Can't convert number");
                 builder.Append(literalNumeral.Literal);
+                remaining -= v;
             }
 
             return builder.ToString();

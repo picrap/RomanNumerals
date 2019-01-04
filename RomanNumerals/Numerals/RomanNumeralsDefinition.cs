@@ -53,6 +53,8 @@
             new LiteralNumeral("\u2168",9),
 
             new LiteralNumeral("\u2169",10),
+            new LiteralNumeral("\u216A",11),
+            new LiteralNumeral("\u216B",12),
             new LiteralNumeral("\u2169\u2169",20),
             new LiteralNumeral("\u2169\u2169\u2169",30),
             new LiteralNumeral("\u2169\u216C",40),

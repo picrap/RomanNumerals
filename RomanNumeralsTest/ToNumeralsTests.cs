@@ -34,5 +34,12 @@
             Assert.AreEqual("\u2160", l);
         }
 
+        [TestMethod]
+        public void Convert12ToⅫTest()
+        {
+            var l = NumeralBuilder.Build(12, NumeralFlags.Unicode);
+            Assert.AreEqual("\u216B", l);
+        }
+
     }
 }
