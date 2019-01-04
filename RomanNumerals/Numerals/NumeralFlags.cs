@@ -7,5 +7,6 @@
     {
         Ascii = 0x01,
         Unicode = 0x02,
+        Vinculum = 0x04,
     }
 }

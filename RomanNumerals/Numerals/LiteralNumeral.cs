@@ -10,7 +10,8 @@
         {
             Literal = literal;
             Digit = digit;
-            Flags = AdjustFlags(literal, flags);
+            Flags = flags;
+            //Flags = AdjustFlags(literal, flags);
         }
 
         private static NumeralFlags AdjustFlags(string literal, NumeralFlags flags)
@@ -29,11 +30,7 @@
 
         public bool Matches(NumeralFlags flags)
         {
-            // unicode flags are mutually exclusive
-            if (((flags ^ Flags) & NumeralFlags.Unicode) != 0)
-                return false;
-
-            return (flags & Flags) == flags;
+            return (Flags & ~flags) == 0;
         }
     }
 }

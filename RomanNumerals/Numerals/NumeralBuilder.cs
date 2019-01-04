@@ -8,6 +8,9 @@
     {
         public static string Build(uint v, NumeralFlags flags = 0)
         {
+            // in case nothing was specified
+            if ((flags & (NumeralFlags.Ascii | NumeralFlags.Unicode)) == 0)
+                flags |= NumeralFlags.Ascii;
             var builder = new StringBuilder();
             var remaining = v;
             foreach (var digit in EnumerateDigits(v))
@@ -26,7 +29,7 @@
                 // look for single digit
                 literalNumeral = RomanNumeralsDefinition.TryGet(digit, flags);
                 if (literalNumeral is null)
-                    throw new ArgumentException("Can't convert number");
+                    throw new ArgumentOutOfRangeException(nameof(v), "Can't convert number");
                 builder.Append(literalNumeral.Literal);
                 remaining -= v;
             }

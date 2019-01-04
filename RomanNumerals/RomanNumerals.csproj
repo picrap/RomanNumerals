@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1</Version>
+    <Authors>picrap</Authors>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/picrap/RomanNumerals.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>roman numerals convert ascii unicode vinculum</PackageTags>
+    <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
+    <PackageId>Roman-Numerals</PackageId>
+    <Company />
   </PropertyGroup>
 
 </Project>

@@ -28,6 +28,20 @@
         }
 
         [TestMethod]
+        public void Convert6005ToVinculumTest()
+        {
+            var l = NumeralBuilder.Build(6005, NumeralFlags.Vinculum);
+            Assert.AreEqual("V\u0305I\u0305V", l);
+        }
+
+        [TestMethod]
+        public void Convert2000010ToVinculumTest()
+        {
+            var l = NumeralBuilder.Build(2_000_010, NumeralFlags.Vinculum);
+            Assert.AreEqual("I\u033FI\u033FX", l);
+        }
+
+        [TestMethod]
         public void Convert1ToⅠTest()
         {
             var l = NumeralBuilder.Build(1, NumeralFlags.Unicode);
