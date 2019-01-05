@@ -9,7 +9,7 @@
         /// The digit to be translated
         /// </summary>
         /// <example>1, 2 but also 10, 20, etc.</example>
-        public int Digit { get; }
+        public uint Digit { get; }
         /// <summary>
         /// The literal representation of digit
         /// </summary>
@@ -25,7 +25,7 @@
         /// <param name="literal"></param>
         /// <param name="digit"></param>
         /// <param name="flags"></param>
-        public LiteralNumeral(string literal, int digit, NumeralFlags flags = 0)
+        public LiteralNumeral(string literal, uint digit, NumeralFlags flags = 0)
         {
             Literal = literal;
             Digit = digit;

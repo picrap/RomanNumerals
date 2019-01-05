@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Utility;
 
     /// <summary>
     /// Definitions for numerals
@@ -91,21 +92,23 @@
             new LiteralNumeral("\u216F\u216F\u216F\u216F",4000, NumeralFlags.Unicode),
         };
 
-        private static IList<LiteralNumeral> _literalNumerals;
+        private static IDictionary<uint, IList<LiteralNumeral>> _literalNumerals;
 
-        private static IList<LiteralNumeral> LiteralNumerals
+        private static IDictionary<uint, IList<LiteralNumeral>> LiteralNumerals
         {
             get
             {
                 if (_literalNumerals is null)
                 {
-                    _literalNumerals = new List<LiteralNumeral>(BaseLiteralNumerals);
-                    foreach (var baseLiteralNumeral in BaseLiteralNumerals.Where(b => b.Flags == NumeralFlags.Ascii || b.Flags == NumeralFlags.Unicode))
+                    _literalNumerals = new Dictionary<uint, IList<LiteralNumeral>>();
+                    foreach (var baseLiteralNumeral in BaseLiteralNumerals)
                     {
-                        if (baseLiteralNumeral.Digit < 1000)
+                        AddLiteralNumeral(_literalNumerals, baseLiteralNumeral);
+                        if ((baseLiteralNumeral.Flags == NumeralFlags.Ascii || baseLiteralNumeral.Flags == NumeralFlags.Unicode)
+                            && baseLiteralNumeral.Digit < 1000)
                         {
-                            _literalNumerals.Add(CreateVinculum(baseLiteralNumeral, '\u0305', 1000));
-                            _literalNumerals.Add(CreateVinculum(baseLiteralNumeral, '\u033F', 1000000));
+                            AddLiteralNumeral(_literalNumerals, CreateVinculum(baseLiteralNumeral, '\u0305', 1000));
+                            AddLiteralNumeral(_literalNumerals, CreateVinculum(baseLiteralNumeral, '\u033F', 1000000));
                         }
                     }
                 }
@@ -114,12 +117,22 @@
             }
         }
 
+        /// <summary>
+        /// Adds a literal numeral
+        /// </summary>
+        /// <param name="literalNumerals"></param>
+        /// <param name="literalNumeral"></param>
+        private static void AddLiteralNumeral(IDictionary<uint, IList<LiteralNumeral>> literalNumerals, LiteralNumeral literalNumeral)
+        {
+            literalNumerals.TryGetOrAddNew(literalNumeral.Digit, () => new List<LiteralNumeral>()).Add(literalNumeral);
+        }
+
         private static LiteralNumeral CreateVinculum(LiteralNumeral numeral, char marker, int factor)
         {
             var literal = new StringBuilder();
             foreach (var c in numeral.Literal)
                 literal.AppendFormat("{0}{1}", c, marker);
-            return new LiteralNumeral(literal.ToString(), numeral.Digit * factor, numeral.Flags | NumeralFlags.Vinculum);
+            return new LiteralNumeral(literal.ToString(), (uint)(numeral.Digit * factor), numeral.Flags | NumeralFlags.Vinculum);
         }
 
         /// <summary>
@@ -130,8 +143,9 @@
         /// <returns></returns>
         public static LiteralNumeral TryGet(uint digit, NumeralFlags flags)
         {
-            // TODO: optimize (dictionary)
-            return LiteralNumerals.FirstOrDefault(v => v.Digit == digit && v.Matches(flags));
+            if (!LiteralNumerals.TryGetValue(digit, out var numerals))
+                return null;
+            return numerals.FirstOrDefault(v => v.Matches(flags));
         }
     }
 }
