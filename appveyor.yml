@@ -28,6 +28,9 @@ build:
   verbosity: minimal
   project: RomanNumerals.sln
 
+after_build:
+  ps: dotnet pack --no-build --include-symbols --include-source --configuration Release RomanNumerals.csproj
+
 test:
   assemblies:
     - '**\*Test.exe'

@@ -13,10 +13,7 @@
     <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
     <PackageId>Roman-Numerals</PackageId>
     <Company />
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if &quot;$(Configuration)&quot; == &quot;Release&quot; (dotnet pack --no-build RomanNumerals.csproj)&#xD;&#xA;" />
-  </Target>
 
 </Project>
