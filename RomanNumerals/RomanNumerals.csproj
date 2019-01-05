@@ -16,4 +16,8 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\RomanNumerals.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>

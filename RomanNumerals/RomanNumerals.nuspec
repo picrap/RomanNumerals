@@ -2,23 +2,25 @@
 <package>
   <metadata>
     <id>Roman-Numerals</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <version>0.1</version>
+    <title>Roman numerals</title>
+    <authors>picrap</authors>
+    <owners>picrap</owners>
     <licenseUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/picrap/RomanNumerals</projectUrl>
     <iconUrl></iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Roman numerals from/to integers</summary>
-    <description>$description$</description>
+    <description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</description>
     <releaseNotes></releaseNotes>
     <copyright>Pascal Craponne</copyright>
     <tags>roman numerals convert ascii unicode vinculum</tags>
     <developmentDependency>false</developmentDependency>
   </metadata>
   <files>
-    <file src="..\RomanNumerals\bin\$ConfigurationName$\RomanNumerals.dll" target="lib\netstandard10"/>
+    <file src="..\RomanNumerals\bin\$ConfigurationName$\netstandard1.0\RomanNumerals.dll" target="lib\netstandard10"/>
+    <file src="..\RomanNumerals\bin\$ConfigurationName$\netstandard1.0\RomanNumerals.pdb" target="lib\netstandard10"/>
+    <file src="..\RomanNumerals\bin\$ConfigurationName$\netstandard1.0\RomanNumerals.xml" target="lib\netstandard10"/>
     <file src="..\RomanNumerals\**\*.cs" target="src"/>
   </files>
 </package>
