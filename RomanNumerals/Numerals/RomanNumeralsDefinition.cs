@@ -4,10 +4,18 @@
     using System.Linq;
     using System.Text;
 
+    /// <summary>
+    /// Definitions for numerals
+    /// </summary>
+    /// <remarks>
+    /// It starts from a simple list (<see cref="BaseLiteralNumerals"/>) and vinculum numerals are added later
+    /// </remarks>
     public static class RomanNumeralsDefinition
     {
         private static readonly LiteralNumeral[] BaseLiteralNumerals =
         {
+            // ASCII
+
             new LiteralNumeral("I",1,NumeralFlags.Ascii),
             new LiteralNumeral("II",2,NumeralFlags.Ascii),
             new LiteralNumeral("III",3,NumeralFlags.Ascii),
@@ -42,6 +50,8 @@
             new LiteralNumeral("MM",2000,NumeralFlags.Ascii),
             new LiteralNumeral("MMM",3000,NumeralFlags.Ascii),
             new LiteralNumeral("MMMM",4000,NumeralFlags.Ascii),
+
+            // Unicode
 
             new LiteralNumeral("\u2160",1, NumeralFlags.Unicode),
             new LiteralNumeral("\u2161",2, NumeralFlags.Unicode),
@@ -112,8 +122,15 @@
             return new LiteralNumeral(literal.ToString(), numeral.Digit * factor, numeral.Flags | NumeralFlags.Vinculum);
         }
 
+        /// <summary>
+        /// Tries to get a numeral matching the digit and flags
+        /// </summary>
+        /// <param name="digit"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
         public static LiteralNumeral TryGet(uint digit, NumeralFlags flags)
         {
+            // TODO: optimize (dictionary)
             return LiteralNumerals.FirstOrDefault(v => v.Digit == digit && v.Matches(flags));
         }
     }

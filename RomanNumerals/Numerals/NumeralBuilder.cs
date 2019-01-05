@@ -4,8 +4,17 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class NumeralBuilder
+    /// <summary>
+    /// Builds roman numerals from integers
+    /// </summary>
+    public static class NumeralBuilder
     {
+        /// <summary>
+        /// Builds roman numeral from integer
+        /// </summary>
+        /// <param name="v"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
         public static string Build(uint v, NumeralFlags flags = 0)
         {
             // in case nothing was specified
@@ -37,6 +46,13 @@
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Enumerates the digits one by one, starting from higher value
+        /// keeping digits at their place:
+        /// </summary>
+        /// <example>140012 --> {100000, 40000, 0,0, 10,2}</example>
+        /// <param name="v"></param>
+        /// <returns></returns>
         private static IEnumerable<uint> EnumerateDigits(uint v)
         {
             var log10 = Math.Floor(Math.Log10(v));
