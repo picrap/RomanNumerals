@@ -94,7 +94,7 @@
 
         private static IDictionary<uint, IList<LiteralNumeral>> _literalNumerals;
 
-        private static IDictionary<uint, IList<LiteralNumeral>> LiteralNumerals
+        internal static IDictionary<uint, IList<LiteralNumeral>> LiteralNumerals
         {
             get
             {

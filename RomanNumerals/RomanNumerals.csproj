@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>0.1</Version>
+    <Version>0.2</Version>
     <Authors>picrap</Authors>
     <PackageLicenseUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
