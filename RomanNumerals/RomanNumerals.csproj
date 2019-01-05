@@ -15,4 +15,8 @@
     <Company />
   </PropertyGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if &quot;$(Configuration)&quot; == &quot;Release&quot; (dotnet pack RomanNumerals.csproj)&#xD;&#xA;" />
+  </Target>
+
 </Project>

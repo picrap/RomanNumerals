@@ -23,13 +23,24 @@ platform: Any CPU
 
 build:
   parallel: true
-  publish_nuget: true
-  publish_nuget_symbols: true
+  publish_nuget: false
+  publish_nuget_symbols: false
   verbosity: minimal
   project: RomanNumerals.sln
+
+test:
+  assemblies:
+    - '**\*Test.exe'
+    - '**\*Test.dll'
+
+artifacts:
+  - path: 'RomanNumerals\bin\$(configuration)\*.nupkg'
 
 deploy:
   provider: NuGet
   api_key:
     secure: rEYnR9JThbc6x8DdCo1K8+fgsGKzjNKzTZsldXFLYMm/tFPC7JWWvuKpVTrDBd+g
   skip_symbols: false
+
+after_test:
+  ps: Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
