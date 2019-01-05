@@ -29,7 +29,7 @@ build:
   project: RomanNumerals.sln
 
 after_build:
-  ps: dotnet pack --no-build --include-symbols --include-source --configuration Release RomanNumerals.csproj
+  ps: dotnet pack --no-build --include-symbols --include-source --configuration Release RomanNumerals\RomanNumerals.csproj
 
 test:
   assemblies:
