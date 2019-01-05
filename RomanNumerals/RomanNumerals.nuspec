@@ -8,7 +8,7 @@
     <owners>picrap</owners>
     <licenseUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/picrap/RomanNumerals</projectUrl>
-    <iconUrl></iconUrl>
+    <!--<iconUrl></iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Roman numerals from/to integers</summary>
     <description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</description>
