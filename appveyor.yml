@@ -29,7 +29,7 @@ build:
   project: RomanNumerals.sln
 
 after_build:
-  ps: NuGet pack RomanNumerals\RomanNumerals.nuspec -Verbosity detailed -NonInteractive -IncludeReferencedProjects -NonInteractive -Properties ConfigurationName=$(configuration) -Symbols
+  ps: NuGet pack RomanNumerals\RomanNumerals.csproj -Verbosity detailed -NonInteractive -IncludeReferencedProjects -NonInteractive -Properties ConfigurationName=Release -Symbols
 
 test:
   assemblies:
