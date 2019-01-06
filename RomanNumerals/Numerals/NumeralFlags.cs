@@ -19,6 +19,7 @@
         Unicode = 0x02,
         /// <summary>
         /// Thousands are marked with a bar above, millions with two bars
+        /// Vinculum marks are Unicode
         /// </summary>
         Vinculum = 0x04,
     }
