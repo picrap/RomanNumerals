@@ -55,5 +55,11 @@
             Assert.AreEqual("\u216B", l);
         }
 
+        [TestMethod]
+        public void Convert227ToⅭⅭⅩⅩⅦTest()
+        {
+            var l = NumeralBuilder.Build(227, NumeralFlags.Unicode);
+            Assert.AreEqual("\u216D\u216D\u2169\u2169\u2166", l);
+        }
     }
 }
