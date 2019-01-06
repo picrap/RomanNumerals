@@ -26,6 +26,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ProductInfo.cs</LastGenOutput>
     </None>
+    <Compile Update="Properties\ProductInfo.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProductInfo.tt</DependentUpon>
+    </Compile>
     <None Update="RomanNumerals.nuspec">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -39,12 +44,6 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\ProductInfo.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ProductInfo.tt</DependentUpon>
-    </Compile>
-  </ItemGroup>
+
 
 </Project>
