@@ -5,7 +5,6 @@
 // Major is incompatible API changes,
 // Minor is backwards-compatible changes
 // Patch is no change.
-// Because multiple packages may depend on MrAdvice, the Assembly Version will only hold the Major version
 var VersionMajor = "1";
 var VersionMinor = "0";
 var VersionPatch = "0";
