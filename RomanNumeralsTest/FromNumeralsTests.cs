@@ -21,5 +21,21 @@
             Assert.IsTrue(p);
             Assert.AreEqual(2019u, v);
         }
+
+        [TestMethod]
+        public void ConvertMDCLXVITo1666Test()
+        {
+            var p = NumeralParser.TryParse("MDCLXVI", out var v);
+            Assert.IsTrue(p);
+            Assert.AreEqual(1666u, v);
+        }
+
+        [TestMethod]
+        public void ConvertCDXLIVTo444Test()
+        {
+            var p = NumeralParser.TryParse("CDXLIV", out var v);
+            Assert.IsTrue(p);
+            Assert.AreEqual(444u, v);
+        }
     }
 }
