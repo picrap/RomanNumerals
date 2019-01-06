@@ -1,0 +1,17 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ include file="ProductInfoValues.tt" #>
+
+using System.Reflection;
+using System.Resources;
+
+[assembly: AssemblyDescription("<#=Description#>")]
+[assembly: AssemblyCompany("<#=Company#>")]
+[assembly: AssemblyProduct("<#=Title#>")]
+[assembly: AssemblyCopyright("MIT license <#=LicenseUrl#>")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en")]
+
+[assembly: AssemblyVersion("<#=Version#>")]
+[assembly: AssemblyFileVersion("<#=Version#>")] // <#=PreVersion#>

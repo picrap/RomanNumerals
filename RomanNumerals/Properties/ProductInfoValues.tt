@@ -1,0 +1,19 @@
+﻿<#
+// all common data between assembly information and nuspec package are stored here
+
+// semantic versioning:
+// Major is incompatible API changes,
+// Minor is backwards-compatible changes
+// Patch is no change.
+// Because multiple packages may depend on MrAdvice, the Assembly Version will only hold the Major version
+var VersionMajor = "0";
+var VersionMinor = "2";
+var VersionPatch = "0";
+var Version = VersionMajor + "." + VersionMinor + "." + VersionPatch;
+var PreVersion = "";
+
+var Title = "RomanNumerals";
+var Company = "picrap";
+var LicenseUrl = "https://raw.githubusercontent.com/picrap/RomanNumerals/master/LICENSE";
+var Description = "Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.";
+#>
