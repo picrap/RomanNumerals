@@ -10,10 +10,12 @@ There are very few features:
 - [x] Use roman numeral ASCII representation (I, II, III, IV)
 - [x] Use roman numeral Unicode representation (Ⅰ, Ⅱ, Ⅲ, Ⅳ)
 - [x] Use roman numeral vinculum extensions (V̅I̅=6000, I̿I̿=200000, etc.)
-- [ ] Use roman numeral apostrophus extensions (ↀ=1000, ↁ=5000, ↂ=10000)
+- [ ] Use roman numeral archaisms (C|Ɔ=1000, |ƆƆ=5000, CC|ƆƆ=10000, |ƆƆƆ=50000, CCC|ƆƆƆ=100000)
+- [ ] Use roman numeral archaisms characters (ↀ=1000, ↁ=5000, ↂ=10000, ↇ=50000, ↈ=100000)
 
 ## Some documentation
 
 Read more about roman numerals at 
 * https://en.wikipedia.org/wiki/Roman_numerals for general information
 * https://en.wikipedia.org/wiki/Numerals_in_Unicode#Roman_numerals for Unicode information
+* https://www.unicode.org/charts/PDF/U2150.pdf for Unicode chart
