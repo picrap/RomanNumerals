@@ -2,6 +2,9 @@
 {
     using System.Linq;
 
+    /// <summary>
+    /// Parser for roman numeral literals
+    /// </summary>
     public static class NumeralParser
     {
         /// <summary>
