@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup> 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\RomanNumerals.xml</DocumentationFile>
@@ -19,30 +19,32 @@
   <PropertyGroup>
     <TransformOnBuild>true</TransformOnBuild>
     <PackageId>Roman-Numerals</PackageId>
+    <PackageLicenseUrl>https://github.com/picrap/RomanNumerals/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
+    <PackageTags>roman numerals convert ascii unicode vinculum</PackageTags>
+    <RepositoryUrl>https://github.com/picrap/RomanNumerals.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/Icon/RomanNumerals.png</PackageIconUrl>
+    <Authors>picrap</Authors>
+    <Company />
+    <Product>Roman Numerals</Product>
+    <Version>1.0.3</Version>
+    <Copyright>picrap</Copyright>
+    <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Properties\ProductInfo.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ProductInfo.cs</LastGenOutput>
-    </None>
-    <Compile Update="Properties\ProductInfo.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ProductInfo.tt</DependentUpon>
-    </Compile>
     <None Update="RomanNumerals.nuspec">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>RomanNumerals.tt</DependentUpon>
     </None>
-    <None Update="RomanNumerals.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>RomanNumerals.nuspec</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 
