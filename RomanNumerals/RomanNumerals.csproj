@@ -12,11 +12,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
-  <PropertyGroup>
     <TransformOnBuild>true</TransformOnBuild>
     <PackageId>Roman-Numerals</PackageId>
     <PackageLicenseUrl>https://github.com/picrap/RomanNumerals/blob/master/LICENSE</PackageLicenseUrl>
