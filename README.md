@@ -1,6 +1,6 @@
 # RomanNumerals
 Converting numbers to and from roman numerals as easy as II+II=IV.  
-Available as a [![NuGet Status](http://img.shields.io/nuget/v/Roman-Numerals.svg?style=flat-square)](https://www.nuget.org/packages/Roman-Numerals) package.
+Available as a [![NuGet package](http://img.shields.io/nuget/v/Roman-Numerals.svg?style=flat-square)](https://www.nuget.org/packages/Roman-Numerals) package.
 
 ## What is does
 
@@ -12,6 +12,7 @@ There are very few features:
 - [x] Use roman numeral vinculum extensions (V̅I̅=6000, I̿I̿=200000, etc.)
 - [ ] Use roman numeral apostrophus (C|Ɔ=1000, |ƆƆ=5000, CC|ƆƆ=10000, |ƆƆƆ=50000, CCC|ƆƆƆ=100000)
 - [ ] Use roman numeral apostrophus special characters (ↀ=1000, ↁ=5000, ↂ=10000, ↇ=50000, ↈ=100000)
+
 Regarding apostrophus, this will be done the day I find documentation about it (i.e. how to write non-trivial numbers such as 7000, 80000, etc.)
 
 ## Some documentation
