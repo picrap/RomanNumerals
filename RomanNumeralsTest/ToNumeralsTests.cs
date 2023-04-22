@@ -27,9 +27,10 @@ public class ToNumeralsTests
     }
 
     [Test]
-    [TestCase(1u, "\u2160")]
-    [TestCase(12u, "\u216B")]
-    [TestCase(227u, "\u216D\u216D\u2169\u2169\u2166")]
+    [TestCase(1u, "Ⅰ")]
+    [TestCase(12u, "Ⅻ")]
+    [TestCase(13u, "ⅩⅢ")]
+    [TestCase(227u, "ⅭⅭⅩⅩⅦ")]
     public void UnicodeTest(uint value, string expectedRoman)
     {
         var l = value.ToRomanNumerals(NumeralFlags.Unicode);
