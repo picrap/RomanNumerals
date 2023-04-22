@@ -1,41 +1,20 @@
-﻿namespace RomanNumeralsTest
+﻿using NUnit.Framework;
+using RomanNumerals.Numerals;
+
+namespace RomanNumeralsTest;
+
+[TestFixture]
+public class FromNumeralsTests
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RomanNumerals.Numerals;
-
-    [TestClass]
-    public class FromNumeralsTests
+    [Test]
+    [TestCase("I", 1u)]
+    [TestCase("MMXIX", 2019u)]
+    [TestCase("MDCLXVI", 1666u)]
+    [TestCase("CDXLIV", 444u)]
+    public void ParseTest(string literalRoman, uint expectedValue)
     {
-        [TestMethod]
-        public void ConvertITo1Test()
-        {
-            var p = NumeralParser.TryParse("I", out var v);
-            Assert.IsTrue(p);
-            Assert.AreEqual(1u, v);
-        }
-
-        [TestMethod]
-        public void ConvertMMXIXTo2019Test()
-        {
-            var p = NumeralParser.TryParse("MMXIX", out var v);
-            Assert.IsTrue(p);
-            Assert.AreEqual(2019u, v);
-        }
-
-        [TestMethod]
-        public void ConvertMDCLXVITo1666Test()
-        {
-            var p = NumeralParser.TryParse("MDCLXVI", out var v);
-            Assert.IsTrue(p);
-            Assert.AreEqual(1666u, v);
-        }
-
-        [TestMethod]
-        public void ConvertCDXLIVTo444Test()
-        {
-            var p = NumeralParser.TryParse("CDXLIV", out var v);
-            Assert.IsTrue(p);
-            Assert.AreEqual(444u, v);
-        }
+        var p = NumeralParser.TryParse(literalRoman, out var v);
+        Assert.IsTrue(p);
+        Assert.AreEqual(expectedValue, v);
     }
 }

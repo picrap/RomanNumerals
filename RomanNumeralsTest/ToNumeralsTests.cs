@@ -1,65 +1,37 @@
-﻿namespace RomanNumeralsTest
+﻿using NUnit.Framework;
+using RomanNumerals.Numerals;
+
+namespace RomanNumeralsTest;
+
+[TestFixture]
+public class ToNumeralsTests
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RomanNumerals.Numerals;
-
-    [TestClass]
-    public class ToNumeralsTests
+    [Test]
+    [TestCase(1u, "I")]
+    [TestCase(10u, "X")]
+    [TestCase(2019u, "MMXIX")]
+    public void AsciiTest(uint value, string expectedRoman)
     {
-        [TestMethod]
-        public void Convert1ToITest()
-        {
-            var l = NumeralBuilder.Build(1);
-            Assert.AreEqual("I", l);
-        }
+        var l = NumeralBuilder.Build(value);
+        Assert.AreEqual(expectedRoman, l);
+    }
 
-        [TestMethod]
-        public void Convert10ToXTest()
-        {
-            var l = NumeralBuilder.Build(10);
-            Assert.AreEqual("X", l);
-        }
+    [Test]
+    [TestCase(6005u, "V\u0305I\u0305V")]
+    [TestCase( 2_000_010u, "I\u033FI\u033FX")]
+    public void VinculumTest(uint value, string expectedRoman)
+    {
+        var l = NumeralBuilder.Build(value, NumeralFlags.Vinculum);
+        Assert.AreEqual(expectedRoman, l);
+    }
 
-        [TestMethod]
-        public void Convert2019ToMMXIXTest()
-        {
-            var l = NumeralBuilder.Build(2019);
-            Assert.AreEqual("MMXIX", l);
-        }
-
-        [TestMethod]
-        public void Convert6005ToVinculumTest()
-        {
-            var l = NumeralBuilder.Build(6005, NumeralFlags.Vinculum);
-            Assert.AreEqual("V\u0305I\u0305V", l);
-        }
-
-        [TestMethod]
-        public void Convert2000010ToVinculumTest()
-        {
-            var l = NumeralBuilder.Build(2_000_010, NumeralFlags.Vinculum);
-            Assert.AreEqual("I\u033FI\u033FX", l);
-        }
-
-        [TestMethod]
-        public void Convert1ToⅠTest()
-        {
-            var l = NumeralBuilder.Build(1, NumeralFlags.Unicode);
-            Assert.AreEqual("\u2160", l);
-        }
-
-        [TestMethod]
-        public void Convert12ToⅫTest()
-        {
-            var l = NumeralBuilder.Build(12, NumeralFlags.Unicode);
-            Assert.AreEqual("\u216B", l);
-        }
-
-        [TestMethod]
-        public void Convert227ToⅭⅭⅩⅩⅦTest()
-        {
-            var l = NumeralBuilder.Build(227, NumeralFlags.Unicode);
-            Assert.AreEqual("\u216D\u216D\u2169\u2169\u2166", l);
-        }
+    [Test]
+    [TestCase(1u, "\u2160")]
+    [TestCase(12u, "\u216B")]
+    [TestCase(227u, "\u216D\u216D\u2169\u2169\u2166")]
+    public void UnicodeTest(uint value, string expectedRoman)
+    {
+        var l = NumeralBuilder.Build(value, NumeralFlags.Unicode);
+        Assert.AreEqual(expectedRoman, l);
     }
 }
