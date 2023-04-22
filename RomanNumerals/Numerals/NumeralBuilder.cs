@@ -29,7 +29,7 @@
 
                 // hint: if the remaining value fits in one digit, use it
                 var literalNumeral = RomanNumeralsDefinition.TryGet(remaining, flags);
-                if (literalNumeral != null)
+                if (literalNumeral is not null)
                 {
                     builder.Append(literalNumeral.Literal);
                     break;

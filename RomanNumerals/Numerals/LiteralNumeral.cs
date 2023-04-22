@@ -30,23 +30,8 @@
             Literal = literal;
             Digit = digit;
             Flags = flags;
-            //Flags = AdjustFlags(literal, flags);
         }
-
-        private static NumeralFlags AdjustFlags(string literal, NumeralFlags flags)
-        {
-            foreach (var c in literal)
-            {
-                if (c >= 0x80)
-                {
-                    flags |= NumeralFlags.Unicode;
-                    break;
-                }
-            }
-
-            return flags;
-        }
-
+        
         /// <summary>
         /// Indicates if this instance can be used with requested flags
         /// </summary>
