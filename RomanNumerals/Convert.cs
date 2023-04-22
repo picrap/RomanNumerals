@@ -17,7 +17,7 @@ namespace RomanNumerals
         /// <returns></returns>
         public static string ToRomanNumerals(this uint value, NumeralFlags flags = 0)
         {
-            return NumeralBuilder.Build(value, flags);
+            return Numerals.NumeralBuilder.Build(value, flags);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace RomanNumerals
         {
             if (value < 0)
                 throw new ArgumentException("Only positive integers are supported");
-            return NumeralBuilder.Build((uint)value, flags);
+            return Numerals.NumeralBuilder.Build((uint)value, flags);
         }
     }
 }
