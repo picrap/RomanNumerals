@@ -8,20 +8,41 @@ using RomanNumerals.Utility;
 
 namespace RomanNumerals;
 
+public enum NumeralKind
+{
+    Default = 0,
+    Any,
+    /// <summary>
+    /// Thousands are marked with a bar above, millions with two bars
+    /// Vinculum marks are Unicode
+    /// </summary>
+    Vinculum,
+    /// <summary>
+    /// Apostrophus extensions: |), (|), |)), ((|)), |))), (((|))) and their Unicode equivalents 
+    /// </summary>
+    Apostrophus,
+}
+
+
 [DebuggerDisplay("{Value} --> {Literal}")]
 public class Numeral
 {
     public string Literal { get; }
     public uint Value { get; }
-    public NumeralFlags Flags { get; }
-    public NumeralFlags ExcludeFlags { get; }
+    public NumeralKind Kind { get; }
 
-    public Numeral(string literal, uint value, NumeralFlags flags = NumeralFlags.Ascii, NumeralFlags excludeFlags = 0)
+    public Numeral(string literal, uint value, NumeralKind kind = NumeralKind.Default)
     {
         Literal = literal;
         Value = value;
-        Flags = flags;
-        ExcludeFlags = excludeFlags;
+        Kind = kind;
+    }
+
+    public bool Matches(NumeralKind kind)
+    {
+        if (Kind == NumeralKind.Any)
+            return true;
+        return Kind == kind;
     }
 }
 
@@ -34,17 +55,34 @@ internal static class NumeralExtensions
         yield return CreateVinculum(numeral, '\u033F', 1_000_000);
     }
 
+    public static IDictionary<string, string> WithVinculum(this IDictionary<string, string> aliases)
+    {
+        return aliases
+            .Concat(aliases.Select(kv => CreateVinculum(kv, '\u0305')))
+            .Concat(aliases.Select(kv => CreateVinculum(kv, '\u033F')));
+    }
+
     public static IEnumerable<Numeral> Single(this Numeral numeral)
     {
         yield return numeral;
     }
 
-    private static Numeral CreateVinculum(this Numeral numeral, char marker, int factor)
+    private static Numeral CreateVinculum(this Numeral numeral, char marker, uint factor)
     {
-        var literal = new StringBuilder();
-        foreach (var c in numeral.Literal)
-            literal.AppendFormat("{0}{1}", c, marker);
-        return new Numeral(literal.ToString(), (uint)(numeral.Value * factor), numeral.Flags | NumeralFlags.Vinculum);
+        return new Numeral(CreateVinculum(numeral.Literal, marker), numeral.Value * factor, NumeralKind.Vinculum);
+    }
+
+    private static KeyValuePair<string, string> CreateVinculum(this KeyValuePair<string, string> kv, char marker)
+    {
+        return new(CreateVinculum(kv.Key, marker), CreateVinculum(kv.Value, marker));
+    }
+
+    private static string CreateVinculum(this string s, char marker)
+    {
+        var v = new StringBuilder();
+        foreach (var c in s)
+            v.AppendFormat("{0}{1}", c, marker);
+        return v.ToString();
     }
 }
 
@@ -52,63 +90,94 @@ public class NumeralsSet
 {
     public uint Base { get; }
 
-    private readonly ICollection<Numeral> _numerals;
     private readonly IDictionary<uint, ICollection<Numeral>> _numeralsByValue;
-    private readonly Dictionary<string, string> _ligatures;
 
-    public static readonly NumeralsSet Default = new NumeralsSet(10, CreateDefaultNumerals(), new Dictionary<string, string>
+    public readonly IDictionary<string, string> UnicodeAliases;
+
+    public static readonly NumeralsSet Default = new NumeralsSet(10, CreateDefaultNumerals(), CreateUnicodeAliases());
+
+    private static Dictionary<string, string> CreateUnicodeAliases()
     {
-        {"I","Ⅰ"},
-        {"II","Ⅱ"},
-        {"III","Ⅲ"},
-        {"IV","Ⅳ"},
-        {"V","Ⅴ"},
-        {"VI","Ⅵ"},
-        {"VII","Ⅶ"},
-        {"VIII","Ⅷ"},
-        {"IX","Ⅸ"},
-        {"X","Ⅹ"},
-        {"XI","Ⅺ"},
-        {"XII","Ⅻ"},
-        {"L","Ⅼ"},
-        {"C","Ⅽ"},
-        {"D","Ⅾ"},
-        {"M","Ⅿ"},
-        {"(|)","ↀ"},
-        {"|))","ↁ"},
-        {"((|))","ↂ"},
-        {"|)))","ↇ"},
-        {"(((|)))"," ↈ"},
-    });
+        return new Dictionary<string, string>
+            {
+                {"I", "Ⅰ"},
+                {"II", "Ⅱ"},
+                {"III", "Ⅲ"},
+                {"IV", "Ⅳ"},
+                {"V", "Ⅴ"},
+                {"VI", "Ⅵ"},
+                {"VII", "Ⅶ"},
+                {"VIII", "Ⅷ"},
+                {"IX", "Ⅸ"},
+                {"X", "Ⅹ"},
+                {"XI", "Ⅺ"},
+                {"XII", "Ⅻ"},
+                {"L", "Ⅼ"},
+                {"C", "Ⅽ"},
+                {"D", "Ⅾ"},
+                {"M", "Ⅿ"},
+
+                {"ⅠⅠ", "Ⅱ"},
+                {"ⅠⅠⅠ", "Ⅲ"},
+
+                {"ⅠⅤ", "Ⅳ"},
+
+                {"ⅤⅠ", "Ⅵ"},
+                {"ⅤⅡ", "Ⅶ"},
+                {"ⅤⅢ", "Ⅷ"},
+
+                {"ⅠⅩ", "Ⅸ"},
+
+                {"ⅩⅠ", "Ⅺ"},
+                {"ⅩⅡ", "Ⅻ"},
+            }.WithVinculum()
+            .Concat(new Dictionary<string, string>
+            {
+                {"(|)", "ↀ"},
+                {"|))", "ↁ"},
+                {"((|))", "ↂ"},
+                {"|)))", "ↇ"},
+                {"(((|)))", " ↈ"},
+            });
+    }
 
     private static IEnumerable<Numeral> CreateDefaultNumerals()
     {
         return new Numeral[]
-        {
-            new("I", 1),
-            new("V", 5),
-            new("X", 10),
-            new("L", 50),
-            new("C", 100),
-            new("D", 500),
-            new("M", 1000),
-        }.SelectMany(n => n.WithVinculum());
+            {
+                new("I", 1, NumeralKind.Any),
+                new("V", 5,NumeralKind.Any),
+                new("X", 10,NumeralKind.Any),
+                new("L", 50,NumeralKind.Any),
+                new("C", 100,NumeralKind.Any),
+                new("D", 500,NumeralKind.Any),
+            }.SelectMany(n => n.WithVinculum())
+            .Concat(new Numeral[]
+            {
+                new("M", 1000),
+            });
     }
 
-    public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, Dictionary<string, string> ligatures)
+    public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, IDictionary<string, string> unicodeAliases)
     {
         Base = @base;
-        _numerals = numerals.ToArray();
-        _numeralsByValue = _numerals.GroupBy(n => n.Value).ToDictionary(n => n.Key, n => (ICollection<Numeral>)n.ToArray());
-        _ligatures = ligatures;
+        _numeralsByValue = numerals.GroupBy(n => n.Value).ToDictionary(n => n.Key, n => (ICollection<Numeral>)n.ToArray());
+        UnicodeAliases = unicodeAliases.ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
     }
 
-    internal NumeralTriplet GetTriplet(uint pow)
+    internal NumeralTriplet GetTriplet(uint pow, NumeralKind kind)
     {
         var nextPow = pow * Base;
-        return new NumeralTriplet(_numeralsByValue.TryGetOrDefault(pow)?.FirstOrDefault(),
-            _numeralsByValue.TryGetOrDefault(nextPow / 2)?.FirstOrDefault(),
-            _numeralsByValue.TryGetOrDefault(nextPow)?.FirstOrDefault());
+        return new NumeralTriplet(_numeralsByValue.TryGetOrDefault(pow)?.FirstOrDefault(n => n.Matches(kind)),
+            _numeralsByValue.TryGetOrDefault(nextPow / 2)?.FirstOrDefault(n => n.Matches(kind)),
+            _numeralsByValue.TryGetOrDefault(nextPow)?.FirstOrDefault(n => n.Matches(kind)));
+    }
+
+    internal string GetUnicodeAlias(string s)
+    {
+        if (UnicodeAliases.TryGetValue(s, out var v))
+            return v;
+        return s;
     }
 }
 
@@ -132,7 +201,9 @@ public class NumeralBuilderOptions
 {
     public int SubtractableDigits { get; set; } = 1;
 
-    public NumeralFlags Flags { get; set; } = NumeralFlags.Ascii;
+    public bool Unicode { get; set; } = false;
+
+    public NumeralKind Kind { get; set; } = NumeralKind.Default;
 
     public static NumeralBuilderOptions Default => new NumeralBuilderOptions();
 }
@@ -168,13 +239,31 @@ public class NumeralBuilder : ICustomFormatter
 
     public string ToString(uint value)
     {
-        var literal = new StringBuilder();
-        foreach (var (digit, pow) in GetDigits(value).Reverse())
-            Append(digit, pow, literal);
-        return literal.ToString();
+        var parts = GetLiteralNumerals(value).ToList();
+        while (parts.Count >= 2)
+        {
+            var lastPart = parts[parts.Count - 2] + parts[parts.Count - 1];
+            var escapedLastPart = _numeralsSet.GetUnicodeAlias(lastPart);
+            if (escapedLastPart == lastPart)
+                break;
+            parts.RemoveRange(parts.Count - 2, 2);
+            parts.Add(escapedLastPart);
+        }
+        return string.Join("", parts);
     }
 
-    private IEnumerable<DigitAndPow> GetDigits(uint value)
+    private IEnumerable<string> GetLiteralNumerals(uint value)
+    {
+        foreach (var (digit, pow) in GetDigitsAndPows(value).Reverse())
+        {
+            var part = GetLiteralNumeral(digit, pow);
+            if (_options.Unicode)
+                part = _numeralsSet.GetUnicodeAlias(part);
+            yield return part;
+        }
+    }
+
+    private IEnumerable<DigitAndPow> GetDigitsAndPows(uint value)
     {
         for (var pow = 1u; value != 0; pow *= _numeralsSet.Base)
         {
@@ -191,15 +280,23 @@ public class NumeralBuilder : ICustomFormatter
         throw new NotImplementedException();
     }
 
-    private void Append(uint value, uint pow, StringBuilder literal)
+    private string GetLiteralNumeral(uint value, uint pow)
     {
         if (value == 0)
-            return;
-        var triplet = _numeralsSet.GetTriplet(pow);
+            return "";
+        var triplet = _numeralsSet.GetTriplet(pow, _options.Kind);
         if (triplet.Unit is null)
             throw new OverflowException($"No unit available for {value}") { Data = { { "Value", value } } };
+        var literal = new StringBuilder();
         foreach (var numeral in GetNumerals(value, triplet))
-            literal.Append(numeral.Literal);
+        {
+            var numeralLiteral = numeral.Literal;
+            if (_options.Unicode)
+                numeralLiteral = _numeralsSet.GetUnicodeAlias(numeralLiteral);
+            literal.Append(numeralLiteral);
+        }
+
+        return literal.ToString();
     }
 
     private IEnumerable<Numeral> GetNumerals(uint value, NumeralTriplet numeralTriplet)

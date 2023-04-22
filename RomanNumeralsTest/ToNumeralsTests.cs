@@ -36,7 +36,7 @@ public class ToNumeralsTests
     [TestCase(2_000_010u, "I\u033FI\u033FX")]
     public void VinculumTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Flags = NumeralFlags.Vinculum });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Vinculum });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
@@ -47,7 +47,7 @@ public class ToNumeralsTests
     [TestCase(227u, "ⅭⅭⅩⅩⅦ")]
     public void UnicodeTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Flags = NumeralFlags.Unicode });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Unicode = true });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
