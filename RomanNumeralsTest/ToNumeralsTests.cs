@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using RomanNumerals;
 using RomanNumerals.Numerals;
 
 namespace RomanNumeralsTest;
@@ -12,7 +13,7 @@ public class ToNumeralsTests
     [TestCase(2019u, "MMXIX")]
     public void AsciiTest(uint value, string expectedRoman)
     {
-        var l = NumeralBuilder.Build(value);
+        var l = value.ToRomanNumerals();
         Assert.AreEqual(expectedRoman, l);
     }
 
@@ -21,7 +22,7 @@ public class ToNumeralsTests
     [TestCase( 2_000_010u, "I\u033FI\u033FX")]
     public void VinculumTest(uint value, string expectedRoman)
     {
-        var l = NumeralBuilder.Build(value, NumeralFlags.Vinculum);
+        var l = value.ToRomanNumerals(NumeralFlags.Vinculum);
         Assert.AreEqual(expectedRoman, l);
     }
 
@@ -31,7 +32,7 @@ public class ToNumeralsTests
     [TestCase(227u, "\u216D\u216D\u2169\u2169\u2166")]
     public void UnicodeTest(uint value, string expectedRoman)
     {
-        var l = NumeralBuilder.Build(value, NumeralFlags.Unicode);
+        var l = value.ToRomanNumerals(NumeralFlags.Unicode);
         Assert.AreEqual(expectedRoman, l);
     }
 }

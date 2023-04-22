@@ -17,7 +17,7 @@ namespace RomanNumerals
         /// <returns></returns>
         public static string ToRomanNumerals(this uint value, NumeralFlags flags = 0)
         {
-            return NumeralBuilder.Build(value, flags);
+            return Numerals.NumeralBuilder.Build(value, flags);
         }
 
         /// <summary>
@@ -30,7 +30,27 @@ namespace RomanNumerals
         {
             if (value < 0)
                 throw new ArgumentException("Only positive integers are supported");
-            return NumeralBuilder.Build((uint)value, flags);
+            return Numerals.NumeralBuilder.Build((uint)value, flags);
+        }
+
+        /// <summary>
+        /// Converts the given <see cref="int" /> to Roman numerals
+        /// </summary>
+        /// <returns></returns>
+        public static uint? TryFromRomanNumerals(this string literalValue)
+        {
+            if (!NumeralParser.TryParse(literalValue, out var value))
+                return null;
+            return value;
+        }
+
+        /// <summary>
+        /// Converts the given <see cref="int" /> to Roman numerals
+        /// </summary>
+        /// <returns></returns>
+        public static uint FromRomanNumerals(this string literalValue)
+        {
+            return TryFromRomanNumerals(literalValue) ?? throw new FormatException($"Can’t parse literal {literalValue}") { Data = { { "Value", literalValue } } };
         }
     }
 }
