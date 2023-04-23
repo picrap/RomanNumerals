@@ -81,7 +81,8 @@ public class ToNumeralsTests
     [TestCase(200_012u, "ↈↈⅫ")]
     public void UnicodeApostrophusTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Apostrophus, Style = NumeralBuilderStyle.Unicode | NumeralBuilderStyle.Ligature });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions
+        { Kind = NumeralKind.Apostrophus, Style = NumeralBuilderStyle.Unicode | NumeralBuilderStyle.Ligature });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
