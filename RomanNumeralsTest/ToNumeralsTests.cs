@@ -65,4 +65,15 @@ public class ToNumeralsTests
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
+
+    [Test]
+    [TestCase(1001u, "ↀⅠ")]
+    [TestCase(5002u, "ↁⅡ")]
+    [TestCase(200_012u, "ↈↈⅫ")]
+    public void UnicodeApostrophusTest(uint value, string expectedRoman)
+    {
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Apostrophus, Unicode = true, Ligature = true });
+        var l = builder.ToString(value);
+        Assert.AreEqual(expectedRoman, l);
+    }
 }
