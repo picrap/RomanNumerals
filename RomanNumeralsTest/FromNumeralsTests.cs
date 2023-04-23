@@ -4,9 +4,11 @@ using RomanNumerals;
 namespace RomanNumeralsTest;
 
 [TestFixture]
+[Property("Direction", "FromString")]
 public class FromNumeralsTests
 {
     [Test]
+    [Property("Class", "ASCII")]
     [TestCase("I", 1u)]
     [TestCase("MMXIX", 2019u)]
     [TestCase("MDCLXVI", 1666u)]

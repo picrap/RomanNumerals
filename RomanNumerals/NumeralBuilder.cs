@@ -25,7 +25,7 @@ public enum NumeralKind
 [Flags]
 public enum NumeralOptions
 {
-    Default = 0,
+    None = 0,
     NoSubtract = 0x0001,
 }
 
@@ -38,7 +38,7 @@ public class Numeral
     public NumeralOptions Options { get; }
 
 
-    public Numeral(string literal, uint value, NumeralKind kind = NumeralKind.Default, NumeralOptions options = NumeralOptions.Default)
+    public Numeral(string literal, uint value, NumeralKind kind = NumeralKind.Default, NumeralOptions options = NumeralOptions.None)
     {
         Literal = literal;
         Value = value;
@@ -98,13 +98,24 @@ public class NumeralsSet
 {
     public uint Base { get; }
 
+    /// <summary>
+    /// Gets the maximum length for a single numeral.
+    /// </summary>
+    /// <value>
+    /// The maximum length.
+    /// </value>
+    public int MaximumLength { get; }
+
     private readonly IDictionary<uint, ICollection<Numeral>> _numeralsByValue;
+    private IDictionary<string, Numeral> _numeralsByLiteral;
+    private IDictionary<string, Numeral> NumeralsByLiteral => _numeralsByLiteral ??= CreateNumeralsByLiteral();
 
-    public readonly IDictionary<string, string> UnicodeAliases;
+    private readonly IDictionary<string, string> _unicodeAliases;
+    private readonly Dictionary<string, string> _ligatures;
 
-    public static readonly NumeralsSet Default = new NumeralsSet(10, CreateDefaultNumerals(), CreateUnicodeAliases());
+    public static readonly NumeralsSet Default = new(10, CreateDefaultNumerals(), CreateUnicodeAliases(), CreateLigatures());
 
-    private static Dictionary<string, string> CreateUnicodeAliases()
+    private static IDictionary<string, string> CreateUnicodeAliases()
     {
         return new Dictionary<string, string>
             {
@@ -149,6 +160,28 @@ public class NumeralsSet
             });
     }
 
+    private static IDictionary<string, string> CreateLigatures()
+    {
+        return new Dictionary<string, string>
+            {
+                {"ⅠⅠ", "Ⅱ"},
+                {"ⅠⅡ", "Ⅲ"},
+                {"ⅡⅠ", "Ⅲ"},
+                {"ⅠⅠⅠ", "Ⅲ"},
+
+                {"ⅠⅤ", "Ⅳ"},
+
+                {"ⅤⅠ", "Ⅵ"},
+                {"ⅤⅡ", "Ⅶ"},
+                {"ⅤⅢ", "Ⅷ"},
+
+                {"ⅠⅩ", "Ⅸ"},
+
+                {"ⅩⅠ", "Ⅺ"},
+                {"ⅩⅡ", "Ⅻ"},
+            }.WithVinculum();
+    }
+
     private static IEnumerable<Numeral> CreateDefaultNumerals()
     {
         return new Numeral[]
@@ -171,11 +204,50 @@ public class NumeralsSet
             });
     }
 
-    public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, IDictionary<string, string> unicodeAliases)
+    public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, IDictionary<string, string> unicodeAliases, IDictionary<string, string> ligatures)
     {
         Base = @base;
         _numeralsByValue = numerals.GroupBy(n => n.Value).ToDictionary(n => n.Key, n => (ICollection<Numeral>)n.ToArray());
-        UnicodeAliases = unicodeAliases.ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        _unicodeAliases = unicodeAliases.ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        _ligatures = ligatures.ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        MaximumLength = new[]
+        {
+            _numeralsByValue.Values.SelectMany(n => n).Select(n=>n.Literal.Length).Max(),
+            _unicodeAliases.Keys.Select(n=>n.Length).Max(),
+            _unicodeAliases.Values.Select(n=>n.Length).Max(),
+            _ligatures.Keys.Select(n=>n.Length).Max(),
+        }.Max();
+    }
+
+    private IDictionary<string, Numeral> CreateNumeralsByLiteral()
+    {
+        return _numeralsByValue.Values.SelectMany(n => n).GroupBy(n => n.Literal).ToDictionary(n => n.Key, n => n.Single());
+    }
+
+    public Numeral TryGetNumeral(string s)
+    {
+        if (NumeralsByLiteral.TryGetValue(s, out var n))
+            return n;
+        return null;
+    }
+
+    public Numeral TryGetNumeral(string s, int start, int length) => TryGetNumeral(s.Substring(start, length));
+
+    public string Unligature(string s) => Replace(s, _ligatures);
+    public string UnUnicode(string s) => Replace(s, _unicodeAliases);
+
+    private static string Replace(string s, IDictionary<string, string> replacements)
+    {
+        for (; ; )
+        {
+            var s0 = s;
+            foreach (var replacement in replacements)
+            {
+                s = s.Replace(replacement.Value, replacement.Key);
+            }
+            if (s == s0)
+                return s;
+        }
     }
 
     internal NumeralTriplet GetTriplet(uint pow, NumeralKind kind)
@@ -188,7 +260,7 @@ public class NumeralsSet
 
     internal string GetUnicodeAlias(string s)
     {
-        if (UnicodeAliases.TryGetValue(s, out var v))
+        if (_unicodeAliases.TryGetValue(s, out var v))
             return v;
         return s;
     }
@@ -198,7 +270,7 @@ public class NumeralsSet
         for (; ; )
         {
             bool replaced = false;
-            foreach (var unicodeAlias in UnicodeAliases.OrderByDescending(kv => kv.Key.Length))
+            foreach (var unicodeAlias in _ligatures.OrderByDescending(kv => kv.Key.Length))
             {
                 if (!s.EndsWith(unicodeAlias.Key, StringComparison.Ordinal))
                     continue;

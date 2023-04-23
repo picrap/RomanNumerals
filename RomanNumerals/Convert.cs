@@ -34,7 +34,7 @@ public static class Convert
 
     public static bool TryParseRomanNumerals(this string s, out uint v)
     {
-        throw new NotImplementedException();
+        return NumeralParser.Default.TryParse(s, out v);
     }
 
     public static uint? TryFromRomanNumerals(this string s)
