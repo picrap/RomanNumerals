@@ -24,7 +24,7 @@
     <Authors>picrap</Authors>
     <Company />
     <Product>Roman Numerals</Product>
-    <Version>1.0.3</Version>
+    <Version>2.0</Version>
     <Copyright>picrap</Copyright>
     <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
   </PropertyGroup>
