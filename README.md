@@ -31,7 +31,7 @@ All methods also works as extension methods:
 ```csharp
 using RomanNumerals;
 var a1 = Convert.ToRomanNumerals(123);
-var a2 = 123.ToRomanNumerals(); // same as above 😍
+var a2 = 123 .ToRomanNumerals(); // same as above 😍
 ```
 
 ### With options
