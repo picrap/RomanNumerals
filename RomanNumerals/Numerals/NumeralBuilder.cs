@@ -39,13 +39,15 @@ public class NumeralBuilder : ICustomFormatter
         throw new NotImplementedException();
     }
 
-    public string ToString(uint value)
+    public string ToString(uint value) => ToString(value, _options, _numeralsSet);
+
+    private static string ToString(uint value, NumeralBuilderOptions options, NumeralsSet numeralsSet)
     {
-        var parts = GetLiteralNumerals(value).ToList();
+        var parts = GetLiteralNumerals(value, options, numeralsSet).ToList();
         while (parts.Count >= 2)
         {
             var lastPart = parts[parts.Count - 2] + parts[parts.Count - 1];
-            var escapedLastPart = CheckLigatures(lastPart);
+            var escapedLastPart = CheckLigatures(lastPart, options, numeralsSet);
             if (escapedLastPart == lastPart)
                 break;
             parts.RemoveRange(parts.Count - 2, 2);
@@ -54,35 +56,35 @@ public class NumeralBuilder : ICustomFormatter
         return string.Join("", parts);
     }
 
-    private IEnumerable<string> GetLiteralNumerals(uint value)
+    private static IEnumerable<string> GetLiteralNumerals(uint value, NumeralBuilderOptions numeralBuilderOptions, NumeralsSet numeralsSet)
     {
-        foreach (var (digit, pow) in GetDigitsAndPows(value).Reverse())
+        foreach (var (digit, pow) in GetDigitsAndPows(value, numeralsSet).Reverse())
         {
-            var part = GetLiteralNumeral(digit, pow);
-            part = CheckLigatures(part);
+            var part = GetLiteralNumeral(digit, pow, numeralBuilderOptions, numeralsSet);
+            part = CheckLigatures(part, numeralBuilderOptions, numeralsSet);
             yield return part;
         }
     }
 
-    private string CheckUnicode(string value)
+    private static string CheckUnicode(string value, NumeralBuilderOptions options, NumeralsSet numeralsSet)
     {
-        if (_options.Unicode)
-            return _numeralsSet.GetUnicodeAlias(value);
+        if (options.Style.HasFlag(NumeralBuilderStyle.Unicode))
+            return numeralsSet.GetUnicodeAlias(value);
         return value;
     }
 
-    private string CheckLigatures(string value)
+    private static string CheckLigatures(string value, NumeralBuilderOptions options, NumeralsSet numeralsSet)
     {
-        if (_options.Ligature)
-            return _numeralsSet.GetUnicodeLigature(value);
+        if (options.Style.HasFlag(NumeralBuilderStyle.Ligature))
+            return numeralsSet.GetUnicodeLigature(value);
         return value;
     }
 
-    private IEnumerable<DigitAndPow> GetDigitsAndPows(uint value)
+    private static IEnumerable<DigitAndPow> GetDigitsAndPows(uint value, NumeralsSet numeralsSet)
     {
-        for (var pow = 1u; value != 0; pow *= _numeralsSet.Base)
+        for (var pow = 1u; value != 0; pow *= numeralsSet.Base)
         {
-            var nextPow = pow * _numeralsSet.Base;
+            var nextPow = pow * numeralsSet.Base;
             var digit = value % nextPow;
             if (digit != 0)
                 yield return new(digit, pow);
@@ -90,28 +92,28 @@ public class NumeralBuilder : ICustomFormatter
         }
     }
 
-    private string GetLiteralNumeral(uint digit, uint pow)
+    private static string GetLiteralNumeral(uint digit, uint pow, NumeralBuilderOptions options, NumeralsSet numeralsSet)
     {
         if (digit == 0)
             return "";
-        var triplet = _numeralsSet.GetTriplet(pow, _options.Kind);
+        var triplet = numeralsSet.GetTriplet(pow, options.Kind);
         if (triplet.Unit is null)
             throw new OverflowException($"No numeral available for {pow}") { Data = { { "Value", digit }, { "Pow", pow } } };
         var literal = new StringBuilder();
-        foreach (var numeral in GetDigitNumerals(digit, triplet))
+        foreach (var numeral in GetDigitNumerals(digit, triplet, options))
         {
             var numeralLiteral = numeral.Literal;
-            numeralLiteral = CheckUnicode(numeralLiteral);
+            numeralLiteral = CheckUnicode(numeralLiteral, options, numeralsSet);
             literal.Append(numeralLiteral);
         }
 
         return literal.ToString();
     }
 
-    private IEnumerable<Numeral> GetDigitNumerals(uint digit, NumeralTriplet numeralTriplet)
+    private static IEnumerable<Numeral> GetDigitNumerals(uint digit, NumeralTriplet numeralTriplet, NumeralBuilderOptions options)
     {
         // [I*X..X[
-        var subtractableValue = _options.SubtractableDigits * numeralTriplet.Unit.Value;
+        var subtractableValue = options.SubtractableDigits * numeralTriplet.Unit.Value;
         if (digit >= numeralTriplet.UpperUnit?.Value - subtractableValue && !numeralTriplet.UpperUnit.Options.HasFlag(NumeralOptions.NoSubtract))
         {
             for (var count = digit; count < numeralTriplet.UpperUnit.Value; count += numeralTriplet.Unit.Value)

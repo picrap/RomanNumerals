@@ -12,10 +12,7 @@ public static class Convert
     {
         var options = new NumeralBuilderOptions();
         if (flags.HasFlag(NumeralFlags.Unicode))
-        {
-            options.Unicode = true;
-            options.Ligature = true;
-        }
+            options.Style |= NumeralBuilderStyle.Unicode | NumeralBuilderStyle.Ligature;
 
         if (flags.HasFlag(NumeralFlags.Vinculum))
             options.Kind = NumeralKind.Vinculum;

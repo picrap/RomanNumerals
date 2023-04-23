@@ -52,7 +52,7 @@ public class ToNumeralsTests
     [TestCase(227u, "ⅭⅭⅩⅩⅦ")]
     public void UnicodeTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Unicode = true, Ligature = true });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Style = NumeralBuilderStyle.Unicode | NumeralBuilderStyle.Ligature });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
@@ -81,7 +81,7 @@ public class ToNumeralsTests
     [TestCase(200_012u, "ↈↈⅫ")]
     public void UnicodeApostrophusTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Apostrophus, Unicode = true, Ligature = true });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Apostrophus, Style = NumeralBuilderStyle.Unicode | NumeralBuilderStyle.Ligature });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
