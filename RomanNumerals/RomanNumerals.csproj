@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net40;netstandard1.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard1.1;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>11</LangVersion>
   </PropertyGroup>
@@ -17,16 +17,29 @@
     <PackageId>Roman-Numerals</PackageId>
     <PackageLicenseUrl>https://github.com/picrap/RomanNumerals/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
-    <PackageTags>roman numerals convert ascii unicode vinculum</PackageTags>
+    <PackageTags>roman numerals convert ascii unicode vinculum apostrophus</PackageTags>
     <RepositoryUrl>https://github.com/picrap/RomanNumerals.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/Icon/RomanNumerals.png</PackageIconUrl>
     <Authors>picrap</Authors>
     <Company />
     <Product>Roman Numerals</Product>
-    <Version>1.0.3</Version>
+    <Version>2.0</Version>
     <Copyright>picrap</Copyright>
     <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>RomanNumerals.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Icon\RomanNumerals.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

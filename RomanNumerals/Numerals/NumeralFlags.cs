@@ -22,5 +22,9 @@
         /// Vinculum marks are Unicode
         /// </summary>
         Vinculum = 0x04,
+        /// <summary>
+        /// Apostrophus extensions: |), (|), |)), ((|)), |))), (((|))) and their Unicode equivalents 
+        /// </summary>
+        Apostrophus = 0x08,
     }
 }
