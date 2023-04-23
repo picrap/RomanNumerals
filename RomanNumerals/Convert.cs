@@ -8,6 +8,23 @@ namespace RomanNumerals;
 /// </summary>
 public static class Convert
 {
+    private static NumeralBuilder CreateBuilder(NumeralFlags flags)
+    {
+        var options = new NumeralBuilderOptions();
+        if (flags.HasFlag(NumeralFlags.Unicode))
+        {
+            options.Unicode = true;
+            options.Ligature = true;
+        }
+
+        if (flags.HasFlag(NumeralFlags.Vinculum))
+            options.Kind = NumeralKind.Vinculum;
+        else if (flags.HasFlag(NumeralFlags.Apostrophus))
+            options.Kind = NumeralKind.Apostrophus;
+        var numeralBuilder = new NumeralBuilder(options: options);
+        return numeralBuilder;
+    }
+
     /// <summary>
     ///     Converts the given <see cref="uint" /> to Roman numerals
     /// </summary>
@@ -16,7 +33,7 @@ public static class Convert
     /// <returns></returns>
     public static string ToRomanNumerals(this uint value, NumeralFlags flags = 0)
     {
-        return Numerals.NumeralBuilder.Build(value, flags);
+        return CreateBuilder(flags).ToString(value);
     }
 
     /// <summary>
@@ -29,7 +46,7 @@ public static class Convert
     {
         if (value < 0)
             throw new ArgumentException("Only positive integers are supported");
-        return Numerals.NumeralBuilder.Build((uint)value, flags);
+        return CreateBuilder(flags).ToString((uint)value);
     }
 
     public static bool TryParseRomanNumerals(this string s, out uint v)

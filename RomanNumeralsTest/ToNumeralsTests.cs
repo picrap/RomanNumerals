@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using RomanNumerals;
-using NumeralBuilder = RomanNumerals.NumeralBuilder;
+using RomanNumerals.Numerals;
+using NumeralBuilder = RomanNumerals.Numerals.NumeralBuilder;
 
 namespace RomanNumeralsTest;
 
