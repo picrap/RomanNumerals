@@ -27,6 +27,19 @@
     <Version>2.0</Version>
     <Copyright>picrap</Copyright>
     <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>RomanNumerals.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Icon\RomanNumerals.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
