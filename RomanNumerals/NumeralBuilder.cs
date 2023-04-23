@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using RomanNumerals.Numerals;
 using RomanNumerals.Utility;
 
 namespace RomanNumerals;
@@ -146,15 +145,20 @@ public class NumeralsSet
         return new Numeral[]
             {
                 new("I", 1, NumeralKind.Any),
-                new("V", 5,NumeralKind.Any),
-                new("X", 10,NumeralKind.Any),
-                new("L", 50,NumeralKind.Any),
-                new("C", 100,NumeralKind.Any),
-                new("D", 500,NumeralKind.Any),
+                new("V", 5, NumeralKind.Any),
+                new("X", 10, NumeralKind.Any),
+                new("L", 50, NumeralKind.Any),
+                new("C", 100, NumeralKind.Any),
+                new("D", 500, NumeralKind.Any),
             }.SelectMany(n => n.WithVinculum())
             .Concat(new Numeral[]
             {
-                new("M", 1000),
+                new("M", 1000, NumeralKind.Default),
+                new("(|)", 1000, NumeralKind.Apostrophus),
+                new("|))", 5_000, NumeralKind.Apostrophus),
+                new("((|))", 10_000, NumeralKind.Apostrophus),
+                new("|)))", 50_000, NumeralKind.Apostrophus),
+                new("(((|)))", 100_000, NumeralKind.Apostrophus),
             });
     }
 
@@ -177,6 +181,26 @@ public class NumeralsSet
     {
         if (UnicodeAliases.TryGetValue(s, out var v))
             return v;
+        return s;
+    }
+
+    internal string GetUnicodeLigature(string s)
+    {
+        for (; ; )
+        {
+            bool replaced = false;
+            foreach (var unicodeAlias in UnicodeAliases.OrderByDescending(kv => kv.Key.Length))
+            {
+                if (!s.EndsWith(unicodeAlias.Key, StringComparison.Ordinal))
+                    continue;
+                var start = s.Substring(0, s.Length - unicodeAlias.Key.Length);
+                s = start + unicodeAlias.Value;
+                replaced = true;
+                break;
+            }
+            if (!replaced)
+                break;
+        }
         return s;
     }
 }
@@ -202,6 +226,7 @@ public class NumeralBuilderOptions
     public int SubtractableDigits { get; set; } = 1;
 
     public bool Unicode { get; set; } = false;
+    public bool Ligature { get; set; } = false;
 
     public NumeralKind Kind { get; set; } = NumeralKind.Default;
 
@@ -243,7 +268,7 @@ public class NumeralBuilder : ICustomFormatter
         while (parts.Count >= 2)
         {
             var lastPart = parts[parts.Count - 2] + parts[parts.Count - 1];
-            var escapedLastPart = _numeralsSet.GetUnicodeAlias(lastPart);
+            var escapedLastPart = CheckLigatures(lastPart);
             if (escapedLastPart == lastPart)
                 break;
             parts.RemoveRange(parts.Count - 2, 2);
@@ -257,10 +282,23 @@ public class NumeralBuilder : ICustomFormatter
         foreach (var (digit, pow) in GetDigitsAndPows(value).Reverse())
         {
             var part = GetLiteralNumeral(digit, pow);
-            if (_options.Unicode)
-                part = _numeralsSet.GetUnicodeAlias(part);
+            part = CheckLigatures(part);
             yield return part;
         }
+    }
+
+    private string CheckUnicode(string value)
+    {
+        if (_options.Unicode)
+            return _numeralsSet.GetUnicodeAlias(value);
+        return value;
+    }
+
+    private string CheckLigatures(string value)
+    {
+        if (_options.Ligature)
+            return _numeralsSet.GetUnicodeLigature(value);
+        return value;
     }
 
     private IEnumerable<DigitAndPow> GetDigitsAndPows(uint value)
@@ -280,54 +318,53 @@ public class NumeralBuilder : ICustomFormatter
         throw new NotImplementedException();
     }
 
-    private string GetLiteralNumeral(uint value, uint pow)
+    private string GetLiteralNumeral(uint digit, uint pow)
     {
-        if (value == 0)
+        if (digit == 0)
             return "";
         var triplet = _numeralsSet.GetTriplet(pow, _options.Kind);
         if (triplet.Unit is null)
-            throw new OverflowException($"No unit available for {value}") { Data = { { "Value", value } } };
+            throw new OverflowException($"No numeral available for {pow}") { Data = { { "Value", digit }, { "Pow", pow } } };
         var literal = new StringBuilder();
-        foreach (var numeral in GetNumerals(value, triplet))
+        foreach (var numeral in GetDigitNumerals(digit, triplet))
         {
             var numeralLiteral = numeral.Literal;
-            if (_options.Unicode)
-                numeralLiteral = _numeralsSet.GetUnicodeAlias(numeralLiteral);
+            numeralLiteral = CheckUnicode(numeralLiteral);
             literal.Append(numeralLiteral);
         }
 
         return literal.ToString();
     }
 
-    private IEnumerable<Numeral> GetNumerals(uint value, NumeralTriplet numeralTriplet)
+    private IEnumerable<Numeral> GetDigitNumerals(uint digit, NumeralTriplet numeralTriplet)
     {
         // [I*X..X[
         var subtractableValue = _options.SubtractableDigits * numeralTriplet.Unit.Value;
-        if (value >= numeralTriplet.UpperUnit?.Value - subtractableValue)
+        if (digit >= numeralTriplet.UpperUnit?.Value - subtractableValue)
         {
-            for (var count = value; count < numeralTriplet.UpperUnit.Value; count += numeralTriplet.Unit.Value)
+            for (var count = digit; count < numeralTriplet.UpperUnit.Value; count += numeralTriplet.Unit.Value)
                 yield return numeralTriplet.Unit;
             yield return numeralTriplet.UpperUnit;
             yield break;
         }
         // [V..VIII*]
-        if (value >= numeralTriplet.HalfUpperUnit?.Value)
+        if (digit >= numeralTriplet.HalfUpperUnit?.Value)
         {
             yield return numeralTriplet.HalfUpperUnit;
-            for (var count = numeralTriplet.HalfUpperUnit.Value; count < value; count += numeralTriplet.Unit.Value)
+            for (var count = numeralTriplet.HalfUpperUnit.Value; count < digit; count += numeralTriplet.Unit.Value)
                 yield return numeralTriplet.Unit;
             yield break;
         }
         // [I*V..V[
-        if (value >= numeralTriplet.HalfUpperUnit?.Value - subtractableValue)
+        if (digit >= numeralTriplet.HalfUpperUnit?.Value - subtractableValue)
         {
-            for (var count = value; count < numeralTriplet.HalfUpperUnit.Value; count += numeralTriplet.Unit.Value)
+            for (var count = digit; count < numeralTriplet.HalfUpperUnit.Value; count += numeralTriplet.Unit.Value)
                 yield return numeralTriplet.Unit;
             yield return numeralTriplet.HalfUpperUnit;
             yield break;
         }
         // [I..III*]
-        for (var count = 0u; count < value; count += numeralTriplet.Unit.Value)
+        for (var count = 0u; count < digit; count += numeralTriplet.Unit.Value)
             yield return numeralTriplet.Unit;
     }
 }

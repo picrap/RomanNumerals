@@ -47,7 +47,7 @@ public class ToNumeralsTests
     [TestCase(227u, "ⅭⅭⅩⅩⅦ")]
     public void UnicodeTest(uint value, string expectedRoman)
     {
-        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Unicode = true });
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Unicode = true, Ligature = true });
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
