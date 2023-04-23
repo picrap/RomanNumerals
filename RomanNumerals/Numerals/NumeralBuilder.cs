@@ -28,6 +28,8 @@ public class NumeralBuilder : ICustomFormatter
     private readonly NumeralsSet _numeralsSet;
     private readonly NumeralBuilderOptions _options;
 
+    public static readonly NumeralBuilder Default = new();
+
     public NumeralBuilder(NumeralsSet numeralsSet = null, NumeralBuilderOptions options = null)
     {
         _numeralsSet = numeralsSet ?? NumeralsSet.Default;
@@ -36,13 +38,16 @@ public class NumeralBuilder : ICustomFormatter
 
     public string Format(string format, object arg, IFormatProvider formatProvider)
     {
-        throw new NotImplementedException();
+        var value = System.Convert.ToUInt32(arg);
+        var options = NumeralBuilderOptions.FromFormatString(format);
+        return ToString(value, options, NumeralsSet.Default);
     }
 
     public string ToString(uint value) => ToString(value, _options, _numeralsSet);
 
-    private static string ToString(uint value, NumeralBuilderOptions options, NumeralsSet numeralsSet)
+    public string ToString(uint value, NumeralBuilderOptions options, NumeralsSet numeralsSet = null)
     {
+        numeralsSet ??= NumeralsSet.Default;
         var parts = GetLiteralNumerals(value, options, numeralsSet).ToList();
         while (parts.Count >= 2)
         {
