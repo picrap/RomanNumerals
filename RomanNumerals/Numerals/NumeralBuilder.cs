@@ -50,7 +50,7 @@
         /// Enumerates the digits one by one, starting from higher value
         /// keeping digits at their place:
         /// </summary>
-        /// <example>140012 --> {100000, 40000, 0,0, 10,2}</example>
+        /// <example>140012 --> {100000, 40000, 0, 0, 10, 2}</example>
         /// <param name="v"></param>
         /// <returns></returns>
         private static IEnumerable<uint> EnumerateDigits(uint v)

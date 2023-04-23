@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using RomanNumerals.Numerals;
+using RomanNumerals;
 
 namespace RomanNumeralsTest;
 
@@ -13,8 +13,7 @@ public class FromNumeralsTests
     [TestCase("CDXLIV", 444u)]
     public void ParseTest(string literalRoman, uint expectedValue)
     {
-        var p = NumeralParser.TryParse(literalRoman, out var v);
-        Assert.IsTrue(p);
+        var v = literalRoman.FromRomanNumerals();
         Assert.AreEqual(expectedValue, v);
     }
 }
