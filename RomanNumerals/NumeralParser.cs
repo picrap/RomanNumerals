@@ -58,7 +58,7 @@ public class NumeralParser
         return true;
     }
 
-    private static IEnumerable<NumeralCount?> GetGroupedNumerals(string s, NumeralsSet numeralsSet)
+    private static IEnumerable<NumeralCount> GetGroupedNumerals(string s, NumeralsSet numeralsSet)
     {
         uint currentValue = uint.MaxValue;
         var values = new List<Numeral>();
@@ -96,7 +96,7 @@ public class NumeralParser
     private static Numeral FindNumeral(string s, NumeralsSet numeralsSet, ref int startIndex)
     {
         var remainingLength = Math.Min(s.Length - startIndex, numeralsSet.MaximumLength);
-        for (int length = 1; length <= remainingLength; length++)
+        for (int length = remainingLength; length >= 1; length--)
         {
             var numeral = numeralsSet.TryGetNumeral(s, startIndex, length);
             if (numeral is null)
