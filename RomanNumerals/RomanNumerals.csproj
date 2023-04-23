@@ -29,6 +29,9 @@
     <Description>Converting numbers to and from roman numerals as easy as II+II=IV. Supports ASCII, Unicode and vinculum extensions.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>RomanNumerals.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
