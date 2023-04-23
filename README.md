@@ -18,7 +18,39 @@ There are very few features:
 
 ### Simple way
 
+To display: `uint` to `string` (representing a Roman numeral)
+```csharp
+Console.WriteLine(RomanNumerals.Convert.ToRomanNumerals(123)); // CXXIII
+Console.WriteLine(RomanNumerals.Convert.ToRomanNumerals(227, NumeralFlags.Unicode)); // ⅭⅭⅩⅩⅦ
+```
+Parsing: `string` to `uint`
+```csharp
+Console.WriteLine(RomanNumerals.Convert.FromRomanNumerals("IV")); // 4
+```
+All methods also works as extension methods:
+```csharp
+using RomanNumerals;
+var a1 = Convert.ToRomanNumerals(123);
+var a2 = 123.ToRomanNumerals(); // same as above 😍
+```
+
 ### With options
+
+#### Formatting
+Formatting is done using the `NumeralBuilder` class, with several options.
+`NumeralBuilder` implements `ICustomFormatter` with the following flags:
+
+| Flag | Effect |
+| :-- | :-- |
+| `0` | Don’t use negative digits (turns `4` to `IIII` instead of `IV`) |
+| `V` or `-` or `=` | Use vinculum notation (turns `1,000` to `Ī` instead of `M`, but also `1,000,000` to `I̿` or `5,000,000` to `V̿`) |
+| `'` or `|` | Use apostrophus notation (turns `1,000` to `(|)` instead of `M`, but also `10,000` to `((|))` or `50,000` to `|)))`) |
+| `u` | Use Unicode (subset of Unicode Roman numerals) |
+| `U` | Use Unicode plus ligatures (full range of Unicode Roman numerals) |
+| `A` | Use ASCII, the default case |
+
+#### Parsing
+Parsing is done using the `NumeralParser` class (with less options, because it parses all forms at once).
 
 ## Some documentation
 
