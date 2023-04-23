@@ -29,11 +29,23 @@ public static class Convert
     {
         if (value < 0)
             throw new ArgumentException("Only positive integers are supported");
-        return Numerals.NumeralBuilder.Build((uint) value, flags);
+        return Numerals.NumeralBuilder.Build((uint)value, flags);
+    }
+
+    public static bool TryParseRomanNumerals(this string s, out uint v)
+    {
+        throw new NotImplementedException();
     }
 
     public static uint? TryFromRomanNumerals(this string s)
     {
-        throw new NotImplementedException();
+        if (TryParseRomanNumerals(s, out var v))
+            return v;
+        return null;
+    }
+
+    public static uint FromRomanNumerals(this string s)
+    {
+        return s.TryFromRomanNumerals() ?? throw new FormatException($"Can’t parse {s}") { Data = { { "Literal", s } } };
     }
 }

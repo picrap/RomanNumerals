@@ -22,6 +22,12 @@ public enum NumeralKind
     Apostrophus,
 }
 
+[Flags]
+public enum NumeralOptions
+{
+    Default = 0,
+    NoSubtract = 0x0001,
+}
 
 [DebuggerDisplay("{Value} --> {Literal}")]
 public class Numeral
@@ -29,12 +35,15 @@ public class Numeral
     public string Literal { get; }
     public uint Value { get; }
     public NumeralKind Kind { get; }
+    public NumeralOptions Options { get; }
 
-    public Numeral(string literal, uint value, NumeralKind kind = NumeralKind.Default)
+
+    public Numeral(string literal, uint value, NumeralKind kind = NumeralKind.Default, NumeralOptions options = NumeralOptions.Default)
     {
         Literal = literal;
         Value = value;
         Kind = kind;
+        Options = options;
     }
 
     public bool Matches(NumeralKind kind)
@@ -154,11 +163,11 @@ public class NumeralsSet
             .Concat(new Numeral[]
             {
                 new("M", 1000, NumeralKind.Default),
-                new("(|)", 1000, NumeralKind.Apostrophus),
-                new("|))", 5_000, NumeralKind.Apostrophus),
-                new("((|))", 10_000, NumeralKind.Apostrophus),
-                new("|)))", 50_000, NumeralKind.Apostrophus),
-                new("(((|)))", 100_000, NumeralKind.Apostrophus),
+                new("(|)", 1000, NumeralKind.Apostrophus, NumeralOptions.NoSubtract),
+                new("|))", 5_000, NumeralKind.Apostrophus, NumeralOptions.NoSubtract),
+                new("((|))", 10_000, NumeralKind.Apostrophus, NumeralOptions.NoSubtract),
+                new("|)))", 50_000, NumeralKind.Apostrophus, NumeralOptions.NoSubtract),
+                new("(((|)))", 100_000, NumeralKind.Apostrophus, NumeralOptions.NoSubtract),
             });
     }
 
@@ -340,7 +349,7 @@ public class NumeralBuilder : ICustomFormatter
     {
         // [I*X..X[
         var subtractableValue = _options.SubtractableDigits * numeralTriplet.Unit.Value;
-        if (digit >= numeralTriplet.UpperUnit?.Value - subtractableValue)
+        if (digit >= numeralTriplet.UpperUnit?.Value - subtractableValue && !numeralTriplet.UpperUnit.Options.HasFlag(NumeralOptions.NoSubtract))
         {
             for (var count = digit; count < numeralTriplet.UpperUnit.Value; count += numeralTriplet.Unit.Value)
                 yield return numeralTriplet.Unit;
@@ -356,7 +365,7 @@ public class NumeralBuilder : ICustomFormatter
             yield break;
         }
         // [I*V..V[
-        if (digit >= numeralTriplet.HalfUpperUnit?.Value - subtractableValue)
+        if (digit >= numeralTriplet.HalfUpperUnit?.Value - subtractableValue && !numeralTriplet.HalfUpperUnit.Options.HasFlag(NumeralOptions.NoSubtract))
         {
             for (var count = digit; count < numeralTriplet.HalfUpperUnit.Value; count += numeralTriplet.Unit.Value)
                 yield return numeralTriplet.Unit;

@@ -51,4 +51,18 @@ public class ToNumeralsTests
         var l = builder.ToString(value);
         Assert.AreEqual(expectedRoman, l);
     }
+
+    [Test]
+    [TestCase(1000u, "(|)")]
+    [TestCase(2000u, "(|)(|)")]
+    [TestCase(2001u, "(|)(|)I")]
+    [TestCase(4900u, "(|)(|)(|)(|)DCCCC")]
+    [TestCase(5000u, "|))")]
+    [TestCase(5010u, "|))X")]
+    public void ApostrophusTest(uint value, string expectedRoman)
+    {
+        var builder = new NumeralBuilder(options: new NumeralBuilderOptions { Kind = NumeralKind.Apostrophus });
+        var l = builder.ToString(value);
+        Assert.AreEqual(expectedRoman, l);
+    }
 }
