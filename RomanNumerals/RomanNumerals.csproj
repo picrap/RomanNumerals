@@ -17,7 +17,7 @@
     <PackageId>Roman-Numerals</PackageId>
     <PackageLicenseUrl>https://github.com/picrap/RomanNumerals/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
-    <PackageTags>roman numerals convert ascii unicode vinculum</PackageTags>
+    <PackageTags>roman numerals convert ascii unicode vinculum apostrophus</PackageTags>
     <RepositoryUrl>https://github.com/picrap/RomanNumerals.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIconUrl>https://raw.githubusercontent.com/picrap/RomanNumerals/master/Icon/RomanNumerals.png</PackageIconUrl>
