@@ -1,6 +1,6 @@
 # RomanNumerals
 Converting numbers to and from roman numerals as easy as II+II=IV.  
-Available as a [![NuGet package](http://img.shields.io/nuget/v/Roman-Numerals.svg?style=flat-square)](https://www.nuget.org/packages/Roman-Numerals) package.
+Available as a [![NuGet package](https://img.shields.io/nuget/v/Roman-Numerals.svg?style=flat-square)](https://www.nuget.org/packages/Roman-Numerals) package.
 
 ## What is does
 
