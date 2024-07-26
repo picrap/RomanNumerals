@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net40;netstandard1.1;net6.0;net8.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <LangVersion>11</LangVersion>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -15,7 +15,6 @@
   <PropertyGroup>
     <TransformOnBuild>true</TransformOnBuild>
     <PackageId>Roman-Numerals</PackageId>
-    <PackageLicenseUrl>https://github.com/picrap/RomanNumerals/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/picrap/RomanNumerals</PackageProjectUrl>
     <PackageTags>roman numerals convert ascii unicode vinculum apostrophus</PackageTags>
     <RepositoryUrl>https://github.com/picrap/RomanNumerals.git</RepositoryUrl>
