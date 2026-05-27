@@ -124,9 +124,9 @@ public class NumeralsSet
         MaximumLength = new[]
         {
             _numeralsByValue.Values.SelectMany(n => n).Select(n=>n.Literal.Length).Max(),
-            _unicodeAliases.Keys.Select(n=>n.Length).Max(),
-            _unicodeAliases.Values.Select(n=>n.Length).Max(),
-            _ligatures.Keys.Select(n=>n.Length).Max(),
+            _unicodeAliases.Keys.Select(n=>n.Length).DefaultIfEmpty().Max(),
+            _unicodeAliases.Values.Select(n=>n.Length).DefaultIfEmpty().Max(),
+            _ligatures.Keys.Select(n=>n.Length).DefaultIfEmpty().Max(),
         }.Max();
     }
 
