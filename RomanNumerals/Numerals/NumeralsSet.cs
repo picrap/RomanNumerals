@@ -115,6 +115,14 @@ public class NumeralsSet
             });
     }
 
+    public NumeralsSet(IEnumerable<Numeral> numerals) : this (
+        10,
+        numerals,
+        new Dictionary<string, string>(),
+        new Dictionary<string, string>()
+    ) {
+    }
+
     public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, IDictionary<string, string> unicodeAliases, IDictionary<string, string> ligatures)
     {
         Base = @base;

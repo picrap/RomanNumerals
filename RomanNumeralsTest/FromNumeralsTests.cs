@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using RomanNumerals;
 using RomanNumerals.Numerals;
-using System.Collections.Immutable;
 
 namespace RomanNumeralsTest;
 
@@ -90,7 +89,6 @@ public class FromNumeralsTests
     {
         var numeralsSet =
             new NumeralsSet(
-                10,
                 new Numeral[]
                 {
                     new("I", 1U, NumeralKind.Any),
@@ -100,9 +98,7 @@ public class FromNumeralsTests
                     new("C", 100U, NumeralKind.Any),
                     new("D", 500U, NumeralKind.Any),
                     new("M", 1000U, NumeralKind.Any),
-                },
-                ImmutableDictionary<string, string>.Empty,
-                ImmutableDictionary<string, string>.Empty
+                }
             );
         var v = NumeralParser.Default.TryParse(literalRoman, out var x, numeralsSet);
         Assert.AreEqual(expectedValue, v ? x : null);
