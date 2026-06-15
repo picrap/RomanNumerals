@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using RomanNumerals;
+using RomanNumerals.Numerals;
 
 namespace RomanNumeralsTest;
 
@@ -73,5 +74,33 @@ public class FromNumeralsTests
     {
         var v = literalRoman.FromRomanNumerals();
         Assert.AreEqual(expectedValue, v);
+    }
+
+    [Test]
+    [Property("Class", "AsciiOnly")]
+    [TestCase("I", 1u)]
+    [TestCase("MMXIX", 2019u)]
+    [TestCase("MDCLXVI", 1666u)]
+    [TestCase("CDXLIV", 444u)]
+    [TestCase("V\u0305I\u0305V", null)]
+    [TestCase("Ⅻ", null)]
+    [TestCase("ↀⅠ", null)]
+    public void ParseAsciiOnlyTest(string literalRoman, uint? expectedValue)
+    {
+        var numeralsSet =
+            new NumeralsSet(
+                new Numeral[]
+                {
+                    new("I", 1U, NumeralKind.Any),
+                    new("V", 5U, NumeralKind.Any),
+                    new("X", 10U, NumeralKind.Any),
+                    new("L", 50U, NumeralKind.Any),
+                    new("C", 100U, NumeralKind.Any),
+                    new("D", 500U, NumeralKind.Any),
+                    new("M", 1000U, NumeralKind.Any),
+                }
+            );
+        var v = NumeralParser.Default.TryParse(literalRoman, out var x, numeralsSet);
+        Assert.AreEqual(expectedValue, v ? x : null);
     }
 }

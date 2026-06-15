@@ -115,6 +115,14 @@ public class NumeralsSet
             });
     }
 
+    public NumeralsSet(IEnumerable<Numeral> numerals) : this (
+        10,
+        numerals,
+        new Dictionary<string, string>(),
+        new Dictionary<string, string>()
+    ) {
+    }
+
     public NumeralsSet(uint @base, IEnumerable<Numeral> numerals, IDictionary<string, string> unicodeAliases, IDictionary<string, string> ligatures)
     {
         Base = @base;
@@ -124,9 +132,9 @@ public class NumeralsSet
         MaximumLength = new[]
         {
             _numeralsByValue.Values.SelectMany(n => n).Select(n=>n.Literal.Length).Max(),
-            _unicodeAliases.Keys.Select(n=>n.Length).Max(),
-            _unicodeAliases.Values.Select(n=>n.Length).Max(),
-            _ligatures.Keys.Select(n=>n.Length).Max(),
+            _unicodeAliases.Keys.Select(n=>n.Length).DefaultIfEmpty().Max(),
+            _unicodeAliases.Values.Select(n=>n.Length).DefaultIfEmpty().Max(),
+            _ligatures.Keys.Select(n=>n.Length).DefaultIfEmpty().Max(),
         }.Max();
     }
 
